@@ -1,44 +1,66 @@
 package ru.geekbrains.summer.market.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import ru.geekbrains.summer.market.services.ProductService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+import ru.geekbrains.summer.market.model.Product;
+import ru.geekbrains.summer.market.repositories.ProductRepository;
 
-@Controller
+import java.util.List;
+
+@RestController
+@RequestMapping("/products")
+@RequiredArgsConstructor
 public class ProductController {
-    private ProductService productService;
+    private final ProductRepository productRepository;
 
-    @Autowired
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
-
-    // GET http://localhost:8189/summer
     @GetMapping
-    public String showMainPage(Model model) {
-        model.addAttribute("items", productService.findAll());
-        return "index";
+    public List<Product> getAllProduct() {
+        return productRepository.findAll();
     }
 
-    @GetMapping("/products/add")
-    public String showAddProductForm() {
-        return "add_product_form";
+    @GetMapping("/{id}")
+    public Product getProductById(@PathVariable Long id) {
+        return productRepository.findById(id).get();
     }
 
-    @PostMapping("/products/add")
-    public String saveNewProduct(@RequestParam String title, @RequestParam int price) {
-        productService.saveNewProduct(title, price);
-        return "redirect:/";
+    @GetMapping("/delete/{id}")
+    public void deleteProductById(@PathVariable Long id) {
+        productRepository.deleteById(id);
     }
 
-    @GetMapping ("/products/{id}")
-    public String showProductInfo(Model model, @PathVariable Long id) {
-        model.addAttribute("product", productService.findById(id));
-        return "product_info";
+    @GetMapping("/search_by_name")
+    public Product findByName(@RequestParam String name) {
+        return productRepository.findByName(name).get();
+    }
+
+    @GetMapping("/search_by_min_price")
+    public List<Product> searchByMinPrice(@RequestParam Integer minPrice) {
+        return productRepository.findAllByPriceIsGreaterThanEqual(minPrice);
+    }
+
+    @GetMapping("/search_by_max_price")
+    public List<Product> searchByMaxPrice(@RequestParam Integer maxPrice) {
+        return productRepository.findAllByPriceIsLessThanEqual(maxPrice);
+    }
+
+    @GetMapping("/search_by_between")
+    public List<Product> searchByBetween(@RequestParam Integer min, Integer max) {
+        return productRepository.findAllByPriceBetween(min, max);
+    }
+
+    @PostMapping
+    public Product save(@RequestBody Product product) {
+        product.setId(null);
+        return productRepository.save(product);
+    }
+
+    @GetMapping("/customQueryOne")
+    public List<Product> customQueryOne(@RequestParam int price) {
+        return productRepository.customQueryOne(price);
+    }
+
+    @GetMapping("/customQuerySecond")
+    public Product customQueryOne(@RequestParam Long id, String name) {
+        return productRepository.customQuerySecond(id, name).get();
     }
 }

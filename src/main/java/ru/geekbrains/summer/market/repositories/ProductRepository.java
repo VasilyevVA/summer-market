@@ -1,47 +1,27 @@
 package ru.geekbrains.summer.market.repositories;
 
-import org.springframework.stereotype.Component;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import ru.geekbrains.summer.market.model.Product;
-import ru.geekbrains.summer.market.utils.ResourceNotFoundException;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-@Component
-public class ProductRepository {
-    private List<Product> items;
+@Repository
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    Optional<Product> findByName(String name);
 
-    @PostConstruct
-    public void init() {
-        this.items = new ArrayList<>(Arrays.asList(
-                new Product(1L, "Milk", 85),
-                new Product(2L, "Bread", 28),
-                new Product(3L, "Cheese", 450)
-        ));
-    }
+    List<Product> findAllByPriceIsGreaterThanEqual(Integer price);
 
-    public List<Product> findAll() {
-        return Collections.unmodifiableList(items);
-    }
+    List<Product> findAllByPriceIsLessThanEqual(Integer price);
 
-    public Product findById(Long id) {
-//        return items.stream()
-//                .filter(p -> p.getId().equals(id))
-//                .findFirst()
-//                .orElseThrow(() -> new ResourceNotFoundException());
-        for (Product p : items) {
-            if (p.getId().equals(id)) {
-                return p;
-            }
-        }
-        throw new ResourceNotFoundException();
-    }
+    List<Product> findAllByPriceBetween(Integer min, Integer max);
 
-    public void save(Product product) {
-        product.setId(items.stream().mapToLong(Product::getId).max().getAsLong() + 1L);
-        items.add(product);
-    }
+    @Query("select p from Product p where p.price = :price")
+    List<Product> customQueryOne(int price);
+
+    @Query("select p from Product p where p.id = ?1 and p.name = ?2")
+    Optional<Product> customQuerySecond(Long id, String name);
+
 }
