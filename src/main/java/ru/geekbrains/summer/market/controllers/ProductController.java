@@ -3,7 +3,7 @@ package ru.geekbrains.summer.market.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.summer.market.model.Product;
-import ru.geekbrains.summer.market.repositories.ProductRepository;
+import ru.geekbrains.summer.market.services.ProductServices;
 
 import java.util.List;
 
@@ -11,56 +11,32 @@ import java.util.List;
 @RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController {
-    private final ProductRepository productRepository;
+    private final ProductServices services;
 
     @GetMapping
-    public List<Product> getAllProduct() {
-        return productRepository.findAll();
+    public List<Product> findAllProducts(
+            @RequestParam(name = "min_price", defaultValue = "0") Integer minPrice,
+            @RequestParam(name = "max_price", required = false) Integer maxPrice
+    ) {
+        if (maxPrice == null) {
+            maxPrice = Integer.MAX_VALUE;
+        }
+        return services.findAllByPrice(minPrice, maxPrice);
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id) {
-        return productRepository.findById(id).get();
-    }
-
-    @GetMapping("/delete/{id}")
-    public void deleteProductById(@PathVariable Long id) {
-        productRepository.deleteById(id);
-    }
-
-    @GetMapping("/search_by_name")
-    public Product findByName(@RequestParam String name) {
-        return productRepository.findByName(name).get();
-    }
-
-    @GetMapping("/search_by_min_price")
-    public List<Product> searchByMinPrice(@RequestParam Integer minPrice) {
-        return productRepository.findAllByPriceIsGreaterThanEqual(minPrice);
-    }
-
-    @GetMapping("/search_by_max_price")
-    public List<Product> searchByMaxPrice(@RequestParam Integer maxPrice) {
-        return productRepository.findAllByPriceIsLessThanEqual(maxPrice);
-    }
-
-    @GetMapping("/search_by_between")
-    public List<Product> searchByBetween(@RequestParam Integer min, Integer max) {
-        return productRepository.findAllByPriceBetween(min, max);
+    public Product findById(@PathVariable Long id) {
+        return services.findProductById(id).get();
     }
 
     @PostMapping
-    public Product save(@RequestBody Product product) {
+    public Product saveNewProduct(@RequestBody Product product) {
         product.setId(null);
-        return productRepository.save(product);
+        return services.saveOrUpdate(product);
     }
 
-    @GetMapping("/customQueryOne")
-    public List<Product> customQueryOne(@RequestParam int price) {
-        return productRepository.customQueryOne(price);
-    }
-
-    @GetMapping("/customQuerySecond")
-    public Product customQueryOne(@RequestParam Long id, String name) {
-        return productRepository.customQuerySecond(id, name).get();
+    @DeleteMapping("/{id}")
+    public void deleteProductById(@PathVariable Long id) {
+        services.deleteProductById(id);
     }
 }
