@@ -5,9 +5,8 @@ create table products
     price      int,
     created_at timestamp default current_timestamp,
     updated_at timestamp default current_timestamp
-
-
 );
+
 insert into products(title, price)
 values ('Product_1', 10),
        ('Product_2', 20),
@@ -31,3 +30,36 @@ values ('Product_1', 10),
        ('Product_20', 200),
        ('Product_21', 210)
 ;
+
+create table users
+(
+    id         bigserial primary key,
+    username   varchar(50) unique,
+    password   varchar(100),
+    enabled    boolean,
+    created_at timestamp default current_timestamp,
+    updated_at timestamp default current_timestamp
+
+
+);
+insert into users(username, password, enabled)
+values ('user1', '{noop}123', 1),
+       ('user2', '{noop}123', 1),
+       ('user3', '{noop}123', 1);
+
+CREATE TABLE authorities
+(
+    username  varchar(50) NOT NULL,
+    authority varchar(50) NOT NULL,
+
+    UNIQUE KEY authorities_idx_1 (username, authority),
+
+    CONSTRAINT authorities_ibfk_1
+        FOREIGN KEY (username)
+            REFERENCES users (username)
+);
+
+INSERT INTO authorities
+VALUES ('user1', 'ROLE_ADMIN'),
+       ('user2', 'ROLE_MANAGER'),
+       ('user3', 'ROLE_USER');

@@ -25,20 +25,37 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
 		</dependency>
 
+
+
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
+			<!--            <scope>runtime</scope>-->
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<!--                <optional>true</optional>-->
+		</dependency>
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -48,15 +65,8 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+			<!--            <scope>test</scope>-->
 		</dependency>
-
-		<!--        &lt;!&ndash; https://mvnrepository.com/artifact/net.bookrain/swagger2 &ndash;&gt;-->
-		<!--        <dependency>-->
-		<!--            <groupId>net.bookrain</groupId>-->
-		<!--            <artifactId>swagger2</artifactId>-->
-		<!--            <version>0.0.1</version>-->
-		<!--        </dependency>-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -84,22 +94,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.5.1</version>
-					<configuration>
-						<source>11</source>
-						<target>11</target>
-						<annotationProcessorPaths>
-							<path>
-								<groupId>org.mapstruct</groupId>
-								<artifactId>mapstruct-processor</artifactId>
-								<version>1.4.1.Final</version>
-							</path>
-						</annotationProcessorPaths>
-					</configuration>
-				</plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>

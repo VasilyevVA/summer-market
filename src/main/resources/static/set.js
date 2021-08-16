@@ -1,5 +1,21 @@
-angular.module('app', []).controller('indexController', function ($scope, $http) {
+angular.module('app', []).controller('setController', function ($scope, $http) {
     const contextPath = 'http://localhost:8190/market/api/v2';
+
+    $scope.submitCreateNewProduct = function () {
+        $http.post(contextPath + '/products', $scope.newProduct)
+            .then(function (response) {
+                console.log($scope.newProduct);
+                $scope.newProduct = null;
+                $scope.fillTable();
+            });
+    };
+
+    $scope.deleteProductById = function (id) {
+        $http.delete(contextPath + '/products/' + id)
+            .then(function (response) {
+                $scope.fillTable();
+            });
+    };
 
     $scope.fillTable = function (pageIndex = 1) {
         $http({
