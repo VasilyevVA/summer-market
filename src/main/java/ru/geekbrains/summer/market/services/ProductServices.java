@@ -17,8 +17,8 @@ import java.util.Optional;
 public class ProductServices {
     private final ProductRepository repository;
 
-    public Optional<Product> findProductById(Long id) {
-        return repository.findById(id);
+    public Optional<ProductDto> findProductById(Long id) {
+        return repository.findById(id).map(ProductDto::new);
     }
 
     public List<Product> findAllProduct() {
@@ -27,10 +27,6 @@ public class ProductServices {
 
     public Page<ProductDto> findAll(Specification<Product> spec, int page, int pageSize) {
         return repository.findAll(spec, PageRequest.of(page - 1, pageSize)).map(ProductDto::new);
-    }
-
-    public List<Product> findAllByPrice(Integer min, Integer max) {
-        return repository.findAllByPriceBetween(min, max);
     }
 
     public Product saveOrUpdate(Product product) {
