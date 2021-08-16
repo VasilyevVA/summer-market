@@ -62,7 +62,8 @@
         <a class="page-link" ng-click="fillTable(ProductsPage.number)">←</a>
       </li>
 
-      <li ng-class="ProductsPage.number == pageIndex - 1 ? 'page-item active' : 'page-item'" ng-repeat="pageIndex in PaginationArray">
+      <li ng-class="ProductsPage.number == pageIndex - 1 ? 'page-item active' : 'page-item'"
+          ng-repeat="pageIndex in PaginationArray">
         <a class="page-link" ng-click="fillTable(pageIndex)">{{pageIndex}}</a>
       </li>
 
@@ -71,7 +72,6 @@
       </li>
     </ul>
   </nav>
-
 
 
   <h3>Добавить новый товар</h3>

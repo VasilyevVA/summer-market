@@ -15,7 +15,7 @@
 <body>
 
 <div class="container" ng-controller="indexController">
-  <h1>Market L11</h1>
+  <h1>Market L12</h1>
 
   <div sec:authorize="isAuthenticated()">
     This content will only be visible to ADMIN users.
@@ -49,12 +49,18 @@
       <td>Название</td>
       <td>Цена</td>
       <td></td>
+      <td></td>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="p in ProductsPage.content">
       <td>{{p.title}}</td>
       <td>{{p.price}}</td>
+      <td>
+        <button class="btn btn-primary" ng-click="addToCart(p.id)">В корзину</button>
+
+      </td>
+
     </tr>
     </tbody>
   </table>
@@ -64,7 +70,8 @@
         <a class="page-link" ng-click="fillTable(ProductsPage.number)">←</a>
       </li>
 
-      <li ng-class="ProductsPage.number == pageIndex - 1 ? 'page-item active' : 'page-item'" ng-repeat="pageIndex in PaginationArray">
+      <li ng-class="ProductsPage.number == pageIndex - 1 ? 'page-item active' : 'page-item'"
+          ng-repeat="pageIndex in PaginationArray">
         <a class="page-link" ng-click="fillTable(pageIndex)">{{pageIndex}}</a>
       </li>
 
@@ -73,6 +80,41 @@
       </li>
     </ul>
   </nav>
+
+  <h3>Корзина</h3>
+  <table class="table table-hover" cellpadding="0" cellspacing="0">
+    <thead>
+    <tr>
+      <td>Название</td>
+      <td>Количество</td>
+      <td>Цена</td>
+      <td>Сумма</td>
+      <td></td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="oi in Cart.items">
+      <td>{{oi.productTitle}}</td>
+      <td>{{oi.quantity}}</td>
+      <td>{{oi.pricePerProduct}}</td>
+      <td>{{oi.price}}</td>
+    </tr>
+
+    <td>Итого</td>
+    <td></td>
+    <td></td>
+    <td>{{Cart.totalPrice}}</td>
+    </tr>
+    </tbody>
+  </table>
+  <button class="btn btn-danger" ng-click="clearCart()">Очистить корзину</button>
+
+
+
+  </tbody>
+  </table>
+
+
 </div>
 </body>
 </html>

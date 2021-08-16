@@ -3,6 +3,7 @@ package ru.geekbrains.summer.market.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.summer.market.beans.Cart;
+import ru.geekbrains.summer.market.dto.CartDto;
 import ru.geekbrains.summer.market.services.ProductServices;
 
 import java.util.List;
@@ -18,12 +19,12 @@ import java.util.List;
 @RequestMapping("/api/v2/cart")
 @RequiredArgsConstructor
 public class CartController {
-    private final ProductServices services;
+    //    private final ProductServices services;
     private final Cart cart;
 
     @GetMapping
-    public Cart getCart() {
-        return cart;
+    public CartDto getCart() {
+        return new CartDto(cart);
     }
 
     @GetMapping("/all")
@@ -33,7 +34,7 @@ public class CartController {
 
     @GetMapping("/add/{id}")
     public void addToCart(@PathVariable Long id) {
-        cart.addProductToCart(id);
+        cart.addToCart(id);
     }
 
 

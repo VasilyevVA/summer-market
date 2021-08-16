@@ -37,7 +37,7 @@ public class ProductController {
     @ApiOperation(value = "receive the product by ID")
     @GetMapping("/{id}")
     public ProductDto findById(@PathVariable Long id) {
-        return services.findProductById(id)
+        return services.findProductDtoById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(String
                         .format("id %s not found", id)));
     }

@@ -1,6 +1,25 @@
 angular.module('app', []).controller('indexController', function ($scope, $http) {
     const contextPath = 'http://localhost:8190/market/api/v2';
 
+
+    $scope.addToCart = function (id) {
+        $http.get(contextPath + '/cart/add/' + id)
+            .then(function (response) {
+                $scope.showCart();
+            });
+    }
+
+
+    $scope.showCart = function () {
+        $http({
+            url: contextPath + '/cart',
+            method: 'GET'
+        }).then(function (response) {
+            $scope.Cart = response.data;
+        });
+    };
+
+
     $scope.fillTable = function (pageIndex = 1) {
         $http({
             url: contextPath + '/products',
@@ -35,5 +54,15 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         }
         return arr;
     }
+
+    $scope.clearCart = function () {
+        $http.get(contextPath + '/cart/clear')
+            .then(function (response) {
+                $scope.showCart();
+            });
+    }
+
+
     $scope.fillTable();
+    $scope.showCart();
 });
